@@ -19,10 +19,11 @@ if not os.path.exists(output_folder):
 video_files = [f for f in os.listdir(video_folder) if f.endswith('.mp4')]
 
 # 迴圈處理多個影片文件
+i = 0
 for video_filename in video_files:
     video_filepath = os.path.join(video_folder, video_filename)
-    output_filename = os.path.join(output_folder, os.path.splitext(video_filename)[0] + '_keypoints.txt')
-
+    output_filename = os.path.join(output_folder, name + '_keypoints_'+ str(i) + '.txt')
+    i = i + 1
     # 打開影片文件
     cap = cv2.VideoCapture(video_filepath)
 
