@@ -2,12 +2,12 @@ import cv2
 import mediapipe as mp
 import os
 
-mp_drawing = mp.solutions.drawing_utils          # mediapipe 繪圖方法
-mp_drawing_styles = mp.solutions.drawing_styles  # mediapipe 繪圖樣式
-mp_pose = mp.solutions.pose  # mediapipe 姿勢偵測
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_pose = mp.solutions.pose
 
 # 指定影片所在檔案夾路徑和 Keypoints 檔案的輸出檔案夾路徑
-name = "Klay"
+name = "RayAllen"
 video_folder = name + "_Video_Folder"  # 影片所在檔案夾名稱
 output_folder = name + "_Keypoints_Folder"  # Keypoints 檔案輸出檔案夾名稱
 
@@ -45,16 +45,21 @@ for video_filename in video_files:
                 print(f"End of video {video_filename}")
                 break
 
-            img = cv2.resize(img, (520, 300))               # 縮小尺寸，加快演算速度
-            img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)     # 將 BGR 轉換成 RGB
-            results = pose.process(img2)                    # 取得姿勢偵測結果
+            img = cv2.resize(img, (520, 300))
+            img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            results = pose.process(img2)
 
             if results.pose_landmarks:
                 # 遍歷每個關鍵點並將座標附加到檔案
                 for idx, landmark in enumerate(results.pose_landmarks.landmark):
                     h, w, c = img.shape
-                    cx, cy = int(landmark.x * w), int(landmark.y * h)
-                    output_file.write(f"{idx},{cx},{cy}\n")
+                    cx, cy, cz = int(landmark.x * w), int(landmark.y * h), landmark.z
+
+                    # 处理 z 值为空的情况
+                    if cz is None:
+                        cz = 0  # 将 z 值替换为零
+
+                    output_file.write(f"{idx},{cx},{cy},{cz}\n")
             mp_drawing.draw_landmarks(
             img,
             results.pose_landmarks,
@@ -63,7 +68,7 @@ for video_filename in video_files:
 
             cv2.imshow('oxxostudio', img)
             if cv2.waitKey(1) == ord('q'):
-                break     # 按下 q 鍵停止
+                break
 
     # 關閉檔案
     output_file.close()
