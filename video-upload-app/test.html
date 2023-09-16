@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传视频</title>
+</head>
+<body>
+    <h1>上传视频</h1>
+    <form id="upload-form" enctype="multipart/form-data" action="/upload" method="POST">
+        <input type="file" id="video-file" name="video" accept="video/*" />
+        <button type="submit">上传视频</button>
+    </form>
+    
+
+    </form>
+    <p id="status"></p>
+
+    <script>
+        
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('video-file');
+        const statusMessage = document.getElementById('status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const file = fileInput.files[0];
+
+            if (!file) {
+                statusMessage.innerText = '请选择一个视频文件';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('video', file);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    statusMessage.innerText = '视频上传成功';
+                } else {
+                    statusMessage.innerText = '视频上传失败';
+                }
+            } catch (error) {
+                statusMessage.innerText = '发生错误：' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
