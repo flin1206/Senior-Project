@@ -82,8 +82,8 @@ if max_keypoints > 0:
     X_dl = np.array(all_keypoints_data)  # 特徵集
     X_dl = X_dl.reshape(-1, max_keypoints, 3)  # 重塑特徵集的形狀
 
-    model.fit(X_dl, y_dl, epochs=200)
-    model.save("my_model.h5")
+    # 載入已保存的模型
+    loaded_model = tf.keras.models.load_model("current_model")
 
     # 預測 new_keypoints 來自哪位球員
     new_keypoints = load_keypoints_file('testkeypoint.txt')  # 替換成您的測試 keypoints 檔案路徑
