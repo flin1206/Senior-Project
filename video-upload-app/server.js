@@ -2,10 +2,31 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const Video = require('./models/video'); // 创建一个Video模型来表示视频元数据
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const { spawn } = require('child_process');
+
+function runPythonScript(filename, res) {
+  const pythonProcess = spawn('python', ['Trans_to_keypoints.py', filename]);
+
+  pythonProcess.stdout.on('data', (data) => {
+    const predictionData = data.toString(); // 将 stdout 数据转换为字符串
+    console.log(`Python stdout: ${predictionData}`);
+
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`Python stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    console.log(`Python process exited with code ${code}`);
+  });
+}
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/video_upload_app', {
   useNewUrlParser: true,
@@ -47,6 +68,10 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     });
 
     await video.save();
+
+    // 运行Python脚本
+    runPythonScript(filename, res);
+
     res.status(200).json({ message: '视频上传成功' });
   } catch (error) {
     console.error(error);
