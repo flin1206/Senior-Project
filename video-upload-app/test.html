@@ -13,14 +13,12 @@
 
     </form>
     <p id="status"></p>
-    <p id="prediction"></p> <!-- 新增一个元素用于显示预测结果 -->
 
     <script>
         
         const form = document.getElementById('upload-form');
         const fileInput = document.getElementById('video-file');
         const statusMessage = document.getElementById('status');
-        const predictionMessage = document.getElementById('prediction'); // 获取显示预测结果的元素
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
