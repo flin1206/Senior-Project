@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+
+	<!--- basic page needs
+   ================================================== -->
+	<meta charset="utf-8">
+	<title>Basketball Analysis</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- mobile specific metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+   ================================================== -->
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/vendor.min.css">
+	<link rel="stylesheet" href="css/main.css">
+
+	<!-- script
+   ================================================== -->
+	<script src="js/modernizr.js"></script>
+
+	<!-- favicons
+	================================================== -->
+	<link rel="shortcut icon" href="favicon.png">
+	
+
+</head>
+
+<body>
+
+	<!-- header
+   ================================================== -->
+	<header id="main-header">
+
+		<div class="row">
+
+			<div class="logo">
+				<a href="index.html">Basketball_Analysis</a>
+			</div>
+
+			<nav id="nav-wrap">
+
+				<a class="mobile-btn" href="#nav-wrap" title="Show navigation">
+					<span class="menu-icon">Menu</span>
+				</a>
+				<a class="mobile-btn" href="#" title="Hide navigation">
+					<span class="menu-icon">Menu</span>
+				</a>
+
+				<ul id="nav" class="nav">
+					<li><a class="smoothscroll" href="#hero">首頁.</a></li>
+					<li class="current"><a class="smoothscroll" href="#portfolio">球員介紹.</a></li>
+					<li><a class="smoothscroll" href="#services">我們的目標.</a></li>
+					<li><a class="smoothscroll" href="#about">投籃方式.</a></li>
+				</ul> 
+
+			</nav> 
+
+		</div>
+
+	</header>
+
+
+	<!-- homepage hero
+   ================================================== -->
+	<section id="hero">
+
+		<video id="hero-video" autoplay loop muted>
+			<source src="../images/basketball_whitwbg_noframe.mp4" type="video/mp4">
+		</video>
+
+		<div class="row hero-content">
+
+			<div class="twelve columns hero-container">
+
+				<!-- hero-slider start-->
+				<div id="hero-slider" class="flexslider">
+
+					<ul class="slides">
+
+						<!-- slide -->
+						<li>
+							<div class="flex-caption">
+								<h1 class="">Ai 投籃動作 偵測與分析</h1>
+								<h3 class="">只要有球跟足夠的空間，人們隨時隨地都可以進行自主訓練，透過專業的數位智能輔助，高效率培養正確、扎實的基本功。
+								</h3>
+							</div>
+						</li>
+
+						<!-- slide -->
+						<li>
+							<div class="flex-caption">
+								<h1 class="">Ai 投籃動作 偵測與分析</h1>
+								<h3 class="">只要有球跟足夠的空間，人們隨時隨地都可以進行自主訓練，透過專業的數位智能輔助，高效率培養正確、扎實的基本功。</h3>
+							</div>
+						</li>
+
+						<!-- slide -->
+						<li>
+							<div class="flex-caption">
+								<h1 class="">Ai 投籃動作 偵測與分析</h1>
+								<h3 class="">只要有球跟足夠的空間，人們隨時隨地都可以進行自主訓練，透過專業的數位智能輔助，高效率培養正確、扎實的基本功。</h3>
+							</div>
+						</li>
+
+					</ul>
+
+				</div> <!-- end hero-slider -->
+
+			</div> <!-- end twelve columns-->
+
+		</div> <!-- end row -->
+
+		<div id="more">
+			<a class="smoothscroll" href="#services">More About Us<i class="fa fa-angle-down"></i></a>
+		</div>
+
+	</section> <!-- end homepage hero -->
+
+
+	<!-- portfolio
+   ================================================== -->
+	<section id="portfolio">
+
+		<div class="row section-head">
+
+			<div class="twelve columns">
+				
+				<h1>立即測試你的本命球員<span>!</span></h1>
+				<!-- Add this in the head section of your HTML file -->
+<script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
+				<div id="predictionData">666565666</div>  	
+				<form id="upload-form" enctype="multipart/form-data" action="/upload" method="POST">
+					<input type="file" id="video-file" name="video" accept="video/*" />
+					<button type="submit">上傳你的投籃精彩片段</button>
+				</form>
+				<script>
+					const socket = io();
+					socket.on('connect', () => {
+						console.log('Connected to Socket.IO server');
+					});
+
+					// 监听来自服务器的 predictionData 事件
+					socket.on('predictionData', (data) => {
+						console.log('Received predictionData:', data);
+						// 更新网页上的内容
+						document.getElementById('predictionData').innerText = data;
+					});
+
+					// 监听连接断开事件
+					socket.on('disconnect', () => {
+						console.log('Disconnected from Socket.IO server');
+					});
+				  </script>
+				<script>
+					const form = document.getElementById('upload-form');
+					const fileInput = document.getElementById('video-file');
+					const statusMessage = document.getElementById('status');
+			
+					form.addEventListener('submit', async (e) => {
+						e.preventDefault();
+			
+						const file = fileInput.files[0];
+			
+						if (!file) {
+							statusMessage.innerText = '请选择一个视频文件';
+							return;
+						}
+			
+						const formData = new FormData();
+						formData.append('video', file);
+			
+						try {
+							const response = await fetch('/upload', {
+								method: 'POST',
+								body: formData,
+							});
+			
+							if (response.ok) {
+								statusMessage.innerText = '视频上传成功';
+							} else {
+								statusMessage.innerText = '视频上传失败';
+							}
+						} catch (error) {
+							statusMessage.innerText = '发生错误：' + error.message;
+						}
+					});
+				</script>
+
+				<h1>我們收錄的球員類型<span>.</span></h1>
+				<hr />
+
+				<p>我們選擇以NBA球星作為樣本。</p>
+				<p>選擇的球星都為NBA知名射手以及NBA名人堂等級的球員，讓我們的數位智能輔助能更精準地調整你的姿勢。</p>
+			</div>
+
+		</div> <!-- end section-head -->
+
+		<div class="row items">
+
+			<!-- portfolio-wrapper -->
+			<div id="portfolio-wrapper" class="bgrid-fourth s-bgrid-third tab-bgrid-half">
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-01">
+							<img src="images/portfolio/kobe24.jpg" alt="Kobe Bryant">
+							<div class="overlay"></div>
+							<div class="portfolio-item-meta">
+								<h5>Kobe Bryant</h5>
+								<p>Shooting Guard</p>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-02">
+							<img src="images/portfolio/KD7.jpg" alt="Kevin Durant">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Kevin Durant</h5>
+									<p>Small Forward</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-03">
+							<img src="images/portfolio/kthompson11.jpg" alt="Klay Thompson">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Klay Thompson</h5>
+									<p>Shooting Guard</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-04">
+							<img src="images/portfolio/curry30.jpg" alt="Stephen Curry">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Stephen Curry</h5>
+									<p>Point Guard</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-05">
+							<img src="images/portfolio/lillard0.jpg" alt="Damian Lillard">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Damian Lillard</h5>
+									<p>Point Guard</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-06">
+							<img src="images/portfolio/korver.jpg" alt="Kyle Korver">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Kyle Korver</h5>
+									<p>Shooting Guard</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-07">
+							<img src="images/portfolio/lebron23.jpg" alt="LeBron James">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>LeBron James</h5>
+									<p>Small Forward</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+				<div class="bgrid folio-item">
+					<div class="item-wrap">
+						<a href="#modal-08">
+							<img src="images/portfolio/ray allen.jpg" alt="ray allen">
+							<div class="overlay">
+								<div class="portfolio-item-meta">
+									<h5>Ray Allen</h5>
+									<p>Shooting Guard</p>
+								</div>
+							</div>
+							<div class="link-icon"><i class="fa fa-plus"></i></div>
+						</a>
+					</div>
+				</div> <!-- item end -->
+
+			</div> <!-- end portfolio-wrapper -->
+
+
+			<!-- modal popup
+	   	========================================================= -->
+			<div id="modal-01" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<!--<img src="images/portfolio/modals/kobe24.jpg" alt=" " />-->
+				</div>
+
+				<div class="description-box">
+					<h4>Kobe Bryant</h4>
+					<p>Kobe Bryant是前美國職業籃球運動員，主打得分後衛位置。柯比1996年直接從高中進入NBA，並效力洛杉磯湖人20年，被公認是史上最偉大球員之一。</p>
+					<span class="categories">Shooting Guard</span>
+				</div>
+
+				<div class="link-box group">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E7%A7%91%E6%AF%94%C2%B7%E5%B8%83%E8%8E%B1%E6%81%A9%E7%89%B9">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-01 end -->
+
+			<div id="modal-02" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<!--<img src="images/portfolio/modals/KD7.jpg" alt="Kevin Durant" /> -->
+				</div>
+
+				<div class="description-box">
+					<h4>Kevin Durant</h4>
+					<p>杜蘭特在2007年NBA選秀首輪以第二順位被西雅圖超音速選中，榮薦年度最佳新秀。2009-10年賽季，21歲的杜蘭特成為NBA史上最年輕的得分王。2013-14年賽季成為NBA
+						MVP。2016-17年賽季，杜蘭特成為自由球員後加盟金州勇士，獲得當季NBA總冠軍，並當選NBA總決賽最有價值球員。2017-18年賽季，勇士連霸NBA總冠軍，連莊NBA總決賽最有價值球員。2021-22年賽季入選NBA75大球星。
+						他代表美國國家隊出戰2010年世錦賽，2012年奧運會，2016年奧運會和2020年奧運會，成功奪得四面金牌，並成為2010年世錦賽和2020年奧運會的最有價值球員。演藝事業方面，杜蘭特於2012年參演電影《雷帝錯上身》。
+					</p>
+					<span class="categories">Small Forward</span>
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E5%87%AF%E6%96%87%C2%B7%E6%9D%9C%E5%85%B0%E7%89%B9">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-02 end -->
+
+			<div id="modal-03" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/kthompson11.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>Klay Thompson</h4>
+					<p>Klay Thompson司職得分後衞，效力於NBA金州勇士隊。
+						克萊·湯普森於2011年通過選秀進入NBA，新秀賽季入選最佳新秀陣容第一陣容；2014-15、2016-17、2017-18賽季以及2021-22賽季四次隨勇士隊奪得NBA總冠軍；兩次入選NBA最佳陣容第三陣容；2018-19賽季入選NBA最佳防守陣容第二陣容；五次入選NBA全明星陣容
+					</p>
+					<span class="categories">Shooting Guard</span>
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E5%85%8B%E9%9B%B7%C2%B7%E6%B9%AF%E6%99%AE%E6%A3%AE">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-03 end -->
+
+			<div id="modal-04" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/curry30.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>Stephen Curry</h4>
+					<p>場上位置為控球後衛，現效力於NBA金州勇士。
+						柯瑞於2009年NBA選秀會中以首輪第7順位加入金州勇士，在2015、2016年兩度獲選年度MVP，也是NBA史上首位全票通過的年度MVP。其職業生涯6度率領金州勇士進入總決賽，率隊奪下4次總冠軍。
+					</p>
+					<span class="categories">Point Guard</span>
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E6%96%AF%E8%92%82%E8%8A%AC%C2%B7%E5%BA%93%E9%87%8C">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-04 end -->
+
+			<div id="modal-05" class="popup-modal slider mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/lillard0.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>Damian Lillard</h4>
+
+					<p>是美國職業籃球運動員，場上主打控球後衛位置，現效力於NBA密爾瓦基公鹿。里拉德在2012年NBA選秀中第1輪第6順位被波特蘭拓荒者隊選中。
+					<div class="categories">Point Guard</div>
+
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E9%81%94%E7%B1%B3%E5%AE%89%C2%B7%E9%87%8C%E6%8B%89%E5%BE%B7">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-05 end -->
+
+			<div id="modal-06" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/korver.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>Kyle Korver</h4>
+
+					<p>柯佛身高2.01米，體重96公斤，場上位置是得分後衛或小前鋒，是著名的三分球射手。 長相與美國演員艾希頓·庫奇、戴夫·法蘭克柯、湯姆·克魯斯等人十分神似</p>
+
+					<div class="categories">Shooting Guard</div>
+
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E5%87%AF%E5%B0%94%C2%B7%E7%A7%91%E6%B2%83%E5%B0%94">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-06 end -->
+
+			<div id="modal-07" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/lebron23.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>LeBron James</h4>
+
+					<p>擁有四座NBA總冠軍、四次NBA最有價值球員、四次總決賽最有價值球員以及兩枚奧運金牌。 同時詹姆士是NBA歷史得分王與第四高總助攻數的球員。
+						詹姆士職業生涯已經入選NBA年度第一隊十三次、NBA年度防守第一隊五次以及全明星賽十九次，並獲選為全明星賽最有價值球員三次。</p>
+
+					<div class="categories">Small Forward</div>
+
+				</div>
+
+				<div class="link-box">
+					<a
+						href="https://zh.wikipedia.org/zh-tw/%E5%8B%92%E5%B8%83%E6%9C%97%C2%B7%E8%A9%B9%E5%A7%86%E6%96%AF">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-07 end -->
+
+			<div id="modal-08" class="popup-modal mfp-hide">
+
+				<div class="media">
+					<img src="images/portfolio/modals/ray allen.jpg" alt="" />
+				</div>
+
+				<div class="description-box">
+					<h4>Ray Allen</h4>
+
+					<p>Ray
+						Allen是NBA在1996年選秀黃金梯成員，當年被灰狼以第5順位挑中，隨後被交易至公鹿，生涯效力過公鹿、超音速、塞爾提克以及熱火，場均18.9分、4.1籃板、3.4助攻、1.1抄截，兩分球命中率48.5%、三分球命中率40%
+					</p>
+
+					<div class="categories">Shooting Guard</div>
+
+				</div>
+
+				<div class="link-box">
+					<a href="https://zh.wikipedia.org/zh-tw/%E9%9B%B7%C2%B7%E9%98%BF%E4%BC%A6">Details</a>
+					<a href="#" class="popup-modal-dismiss">Close</a>
+				</div>
+
+			</div><!-- modal-08 end -->
+
+		</div> <!-- end row -->
+
+	</section> <!-- end portfolio -->
+
+
+	<!-- Services Section
+   ================================================== -->
+	<section id="services">
+
+		<div class="row section-head">
+
+			<div class="twelve columns">
+
+				<h1>我們的目標<span>.</span></h1>
+
+				<hr />
+
+				<p>透過 AI 深度學習讓使用者在自主訓練定點投籃時，請智能籃球教練分析投籃動作，對比NBA球星姿勢準確率，並協助改善。</p>
+				<p>AI 智能籃球教練分析投籃姿勢並給予建議，提供對應的方針，規劃訓練菜單，進而嘗試提高命中率。</p>
+
+			</div>
+
+		</div> <!-- end section-head -->
+
+		<div class="row mobile-no-padding">
+
+			<div class="service-list bgrid-third s-bgrid-half tab-bgrid-whole group">
+
+				<div class="bgrid">
+
+					<h3>受眾</h3>
+
+					<div class="service-content">
+						<p>需要做自主練習的籃球愛好者</p>
+					</div>
+
+				</div> <!-- end bgrid -->
+
+				<div class="bgrid">
+
+					<h3>核心價值</h3>
+
+					<div class="service-content">
+						<p>人人都能擁有數位教練服務</p>
+					</div>
+
+				</div> <!-- end bgrid -->
+
+				<div class="bgrid">
+
+					<h3>使用工具</h3>
+
+					<div class="service-content">
+						<p>Python + keras 框架 + CNN skeleton trainning + 網頁呈現</p>
+					</div>
+
+				</div> <!-- end bgrid -->
+
+				<div class="bgrid">
+
+					<h3>競爭優勢</h3>
+
+					<div class="service-content">
+						<p>可以無視時間和空間的限制，平常要向真人教練請教需要特別約時間，而 AI 教練則可以隨時隨地都扮演絕佳的訓練輔助角色。
+						</p>
+					</div>
+
+				</div> <!-- end bgrid -->
+
+			</div> <!-- end service-list -->
+
+		</div> <!-- end row -->
+
+	</section> <!-- end services -->
+
+
+	<!-- About Section
+   ================================================== -->
+
+	<section id="about">
+
+		<div class="row section-head">
+
+			<div class="twelve columns">
+
+				<h1>投籃方式<span>.</span></h1>
+
+				<hr />
+
+				<p>很多人會有一種迷思，就是該如何以最漂亮以及最標準的姿勢投球，但事實上，並沒有所謂「正確的投籃姿勢」與「錯誤的投籃姿勢」
+				</p>
+
+				<p>因為每個人的身體構造不盡相同，像是臂展、腿部跳躍能力、身體重心都有所不同，而我們必須找出一個最順手且舒服的姿勢，充分的運用全身力量將球拋出一個拋物線的動作。
+				</p>
+
+				<p>那如何運用全身的能量呢? 以下有三個要點 :
+				</p>
+
+			</div> <!-- end section-head -->
+
+		</div>
+
+		<div class="about-picture-motion1">
+			<div class="about-picture">
+				<img src="images/team/One_Motion1.png" alt="" />
+			</div>
+		</div>
+
+		<div class="row mobile-no-padding">
+
+			<div class="process bgrid-half tab-bgrid-whole group">
+
+				<div class="bgrid">
+
+					<h3>舉球.</h3>
+
+					<p>
+						手臂及手臂相關的肌肉推動籃球.
+					</p>
+
+				</div>
+
+				<div class="bgrid">
+
+					<h3>腿部伸展.</h3>
+
+					<p>股四頭肌，臀大肌，大腿後側肌群和小腿肌肉進行垂直跳, 或加上其他輔助肌肉做出往前上跳躍動作.
+						軀幹做出輔助跳躍的動作.
+					</p>
+
+				</div>
+
+				<div class="bgrid">
+
+					<h3>手部伸展.</h3>
+
+					<p>投石機形甩投: 像投石機一樣甩動手臂的不同部位
+					Swishmaster風格推投：兩階段推動籃球。
+					</p>
+
+				</div>
+
+			</div> <!-- end process -->
+
+		</div> <!-- end row -->
+
+		<br><br><br><br>
+
+		<div class="row team section-head">
+
+			<div class="twelve columns">
+
+				<h1>One motion . Two motion<span>.</span></h1>
+
+				<hr />
+
+			</div>
+
+		</div> <!-- end section-head -->
+
+		<div class="row">
+
+			<div id="team-wrapper" class="bgrid-fourth s-bgrid-third tab-bgrid-half mob-bgrid-whole group">
+
+				<div class="portfolio-container1">
+
+					<div class="portfolio-text-left">
+						<h3>One Motion 投籃方式</h3>
+						<span>連貫式投籃方法</span>
+
+					<p>將球舉到額頭前位置，就直接把球推射出去</p>
+					<p>由於腿部彎曲，再到投出去，力量從腿部傳到額前投籃，整個過程一氣呵成，有點像是甩出去。</p>
+					<p>最典型的代表人物為 : Stephen Curry, Damian Lillard</p>
+					</div>
+
+					<div class="portfolio-excel-right">
+						<div class="about-picture">
+							<img src="images/team/One_Motion2.png" alt="" />
+						</div>
+					</div>
+
+				</div> <!-- end member -->
+				<br><br><br>
+				<div class="portfolio-container1">
+
+					<div class="portfolio-text-left">
+						<h3>Two Motion 投籃方式</h3>
+						<span>兩段式投籃方法</span>
+
+						<p>與one motion的不同是他將球舉到頭頂上方一定位置，並跳起出手，整個過程沒有one motion那麼連貫。</p>
+						<p>通常是起跳在最高點，完成出手，起跳後將球舉到頭部有停頓，會導致腿部的力量停頓在一刻，所以two motion需要更大的手臂及核心力量。</p>
+						<p>最典型的代表人物為 : Kobe Bryant, Ray Allen</p>
+						</div>
+
+					<div class="portfolio-excel-right">
+						<div class="about-picture">
+							<img src="images/team/One_Motion3.png" alt="" />
+						</div>
+					</div>
+
+				</div> <!-- end member -->
+
+			</div> <!-- end team-wrapper -->
+
+		</div> <!-- end row -->
+		<!--  修改線
+      <div id="call-to-action">	       
+
+		   <div class="row section-ads">
+
+		      <div class="twelve columns">		         		
+
+			      <h2><a href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT">Styleshout Recommends Dreamhost<span>.</span></a></h2>
+
+			      <p>
+			      Looking for an awesome and reliable webhosting? Try <a href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT"><span>DreamHost</span></a>.
+					Get <span>$50 off</span> when you sign up with the promocode <span>styleshout</span>. 
+					<!-- Simply type	the promocode in the box labeled “Promo Code” when placing your order. -->
+		<!--  修改線		
+					</p>
+
+					<div class="action">
+			         <a href="http://www.dreamhost.com/r.cgi?287326|STYLESHOUT" >Sign Up Now</a>
+	         	</div>
+
+			   </div>
+
+		   </div> <!-- end section-ads -->
+		<!--  修改線
+	   </div> <!-- end call-to-action -->
+
+	</section> <!-- end about -->
+
+
+	<!-- Testimonials Section
+   ================================================== -->
+	<!--  修改線
+   <section id="testimonials">
+
+      <div class="row content flex-container">
+    
+         <div id="testimonial-slider" class="flexslider">
+
+            <ul class="slides">
+               <li>
+                  <p>Your work is going to fill a large part of your life, and the only way to be truly satisfied is
+                  to do what you believe is great work. And the only way to do great work is to love what you do.
+                  If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.
+                  </p>
+
+                  <div class="testimonial-author">
+                    	<img src="images/avatars/avatar-1.jpg" alt="Author image">
+                    	<div class="author-info">
+                    		Steve Jobs
+                    		<span class="position">CEO, Apple.</span>
+                    	</div>
+                  </div>
+             	</li> <!-- end slide -->
+	<!--  修改線
+               <li>                       
+                  <p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
+                  Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem
+                  nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.
+                  </p>
+                  <div class="testimonial-author">
+                    	<img src="images/avatars/avatar-2.jpg" alt="Author image">
+                    	<div class="author-info">
+                    		John Doe
+                    		<span>CEO, ABC Corp.</span>
+                    	</div>
+                  </div>                        
+               </li> <!-- end slide -->
+
+	</ul> <!-- end slides -->
+
+	</div> <!-- end flexslider -->
+
+	</div> <!-- end row -->
+
+	</section> <!-- end testimonials section -->
+
+
+	<!-- contact
+   ================================================== -->
+	<!--  修改線
+   <section id="contact">
+
+   	<div class="row section-head">
+
+   		<div class="twelve columns">
+
+	         <h1>Get In Touch With Us<span>.</span></h1>
+
+	         <hr />	        
+
+	      </div>
+
+      </div> <!-- end section-head -->
+	<!--  修改線
+      <div class="row">
+      	
+      	<div id="contact-form" class="six columns tab-whole left">
+
+            <!-- form -->
+	<!--  修改線
+            <form name="contactForm" id="contactForm" method="post" action=""  >
+      			<fieldset>
+
+                  <div class="group">
+ 						   <input name="contactName" type="text" id="contactName" placeholder="Name" value="" minLength="2" required />
+                  </div>
+                  <div>
+	      			   <input name="contactEmail" type="email" id="contactEmail" placeholder="Email" value="" required />
+	               </div>
+                  <div>
+	     				   <input name="contactSubject" type="text" id="contactSubject" placeholder="Subject"  value="" />
+	               </div>                       
+                  <div>
+	                 	<textarea name="contactMessage"  id="contactMessage" placeholder="message" rows="10" cols="50" required ></textarea>
+	               </div>                      
+                  <div>
+                     <button class="submitform">Submit</button>
+                     <div id="submit-loader">
+                        <div class="text-loader">Sending...</div>                             
+       				      <div class="s-loader">
+								  	<div class="bounce1"></div>
+								  	<div class="bounce2"></div>
+								  	<div class="bounce3"></div>
+								</div>
+							</div>
+                  </div>
+
+      			</fieldset>
+      		</form> <!-- Form End -->
+
+	<!-- contact-warning -->
+	<!--  修改線
+            <div id="message-warning"></div>
+            <!-- contact-success -->
+	<!--  修改線
+      		<div id="message-success">
+               <i class="icon-ok"></i>Your message was sent, thank you!<br />
+      		</div>
+
+         </div>
+
+         <div class="six columns tab-whole right">
+
+            <p class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
+
+	         <h3 class="address">Come Visit</h3>
+
+	         <p>
+            1600 Amphitheatre Parkway<br>
+            Mountain View, CA<br>
+            94043 US
+            </p>
+
+            <h3>Contact Numbers:</h3>
+			   <p>Phone: (000) 555 1212<br>
+			   	Mobile: (000) 555 0100<br>
+			     	Fax: (000) 555 0101
+			   </p>
+               	
+         </div>     	
+
+      </div> <!-- end row -->
+
+	</section> <!-- end contact -->
+
+
+	<!-- Footer
+   ================================================== -->
+	<footer>
+
+		<div class="row">
+
+			<div class="twelve columns content group">
+
+				<ul class="social-links">
+					<li><a href="#"><i class="fa fa-facebook-square"></i></a></li>
+					<li><a href="#"><i class="fa fa-twitter-square"></i></a></li>
+					<li><a href="#"><i class="fa fa-google-plus-square"></i></a></li>
+					<li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+					<li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+					<li><a href="#"><i class="fa fa-flickr"></i></a></li>
+					<li><a href="#"><i class="fa fa-skype"></i></a></li>
+				</ul>
+
+				<hr />
+
+				<div class="info">
+
+					<div class="footer-logo"></div>
+
+					<p>TAHRD
+					</p>
+
+				</div>
+
+			</div>
+			<!--  修改線
+         <ul class="copyright">
+         	<li>&copy; Copyright 2015 KREO.</li> 
+         	<li>Design by <a href="http://www.styleshout.com/">Styleshout.</a>.</li>
+         </ul>
+-->
+			<div id="go-top">
+				<a class="smoothscroll" title="Back to Top" href="#hero">Back to Top<i class="fa fa-angle-up"></i></a>
+			</div>
+
+		</div> <!-- end row -->
+
+	</footer> <!-- end footer -->
+
+	<div id="preloader">
+		<div id="loader">
+			<span>Basketball Analysis</span>
+		</div>
+	</div>
+
+	<!-- Java Script
+   ================================================== -->
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery-migrate-1.2.1.min.js"></script>
+	<script src="js/jquery.flexslider-min.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/jquery.fittext.js"></script>
+	<script src="js/jquery.placeholder.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/main.js"></script>
+
+</body>
+
+</html>

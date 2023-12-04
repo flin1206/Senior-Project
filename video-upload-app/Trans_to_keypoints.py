@@ -117,4 +117,30 @@ predicted_probabilities_dl = loaded_model.predict(np.expand_dims(new_keypoints, 
 predicted_player_index_dl = np.argmax(predicted_probabilities_dl)
 predicted_player_dl = player_names[predicted_player_index_dl]
 
-print(f'深度學習模型 預測 new_keypoints 最有可能來自 {predicted_player_dl}')
+print(f'{predicted_player_dl}')
+
+#########################################################################################
+import pymongo
+from bson import ObjectId
+myclient = pymongo.MongoClient('mongodb://localhost:27017/')
+mydb = myclient["video_upload_app"]
+mycol = mydb["videos"]
+
+x = mycol.find_one(sort=[("createdAt", pymongo.DESCENDING)])
+if x:
+    document_id = x["_id"]
+# print(x)
+query = {"_id": ObjectId(document_id)}
+
+# 获取要更新的文档
+existing_document = mycol.find_one(query)
+
+# 更新文档
+existing_document["result"] = predicted_player_dl
+
+# 保存更新后的文档
+mycol.save(existing_document)
+
+# 打印更新后的文档
+updated_document = mycol.find_one(query)
+#　print(updated_document)

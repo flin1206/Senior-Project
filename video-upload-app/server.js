@@ -4,18 +4,27 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const Video = require('./models/video'); // 创建一个Video模型来表示视频元数据
-
+const { spawn } = require('child_process');
+const http = require('http');
+const socketIo = require('socket.io');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const { spawn } = require('child_process');
 
-function runPythonScript(filename, res) {
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+
+
+
+function runPythonScript(filename, socket) {
   const pythonProcess = spawn('python', ['Trans_to_keypoints.py', filename]);
 
   pythonProcess.stdout.on('data', (data) => {
     const predictionData = data.toString(); // 将 stdout 数据转换为字符串
     console.log(`Python stdout: ${predictionData}`);
 
+    // 实时更新数据到前端
+    socket.emit('predictionData', predictionData);
   });
 
   pythonProcess.stderr.on('data', (data) => {
@@ -26,6 +35,7 @@ function runPythonScript(filename, res) {
     console.log(`Python process exited with code ${code}`);
   });
 }
+
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/video_upload_app', {
@@ -42,10 +52,19 @@ db.once('open', () => {
 // Serve the test.html file at the root ("/") path
 app.get('/', (req, res) => {
   // Read and send the test.html file
-  res.sendFile(path.join(__dirname, 'test.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+
+app.use(express.static(path.join(__dirname, '/public')));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -61,16 +80,18 @@ const upload = multer({ storage });
 
 app.post('/upload', upload.single('video'), async (req, res) => {
   try {
+    const { result } = 'curry'
     const { originalname, filename } = req.file;
     const video = new Video({
       originalname,
       filename,
+      result,
     });
 
     await video.save();
 
-    // 运行Python脚本
-    runPythonScript(filename, res);
+    // 运行Python脚本，并将 socket 传递给函数
+    runPythonScript(filename, io);
 
     res.status(200).json({ message: '视频上传成功' });
   } catch (error) {
@@ -85,9 +106,18 @@ app.get('/videos/:filename', (req, res) => {
   res.sendFile(path.join(__dirname, 'uploads', filename));
 });
 
-app.listen(PORT, () => {
-  console.log(`服务器运行在端口 ${PORT}`);
+// 在你的 Express 应用程序中添加以下代码
+app.get('/latest', async (req, res) => {
+  try {
+    const videos = await Video.find().sort({ createdAt: -1 }).limit(5); // 获取最新的 5 个视频
+    res.render('test', { videos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: '无法获取视频信息' });
+  }
 });
+
+server.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
 
 app.get('/', (req, res) => {
   // 在这里可以返回一个欢迎页面或其他内容
