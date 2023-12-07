@@ -12,7 +12,7 @@ def load_player_keypoints(player_folder):
         return [], 0
     
     keypoints_data = []
-    max_keypoints = 0  # 用於確保所有特徵集的大小相同
+    max_keypoints = 700  # 用於確保所有特徵集的大小相同
     for filename in player_files:
         # print("found " + filename)
         keypoints = load_keypoints_file(os.path.join(player_folder, filename))
@@ -37,7 +37,8 @@ def load_keypoints_file(filename):
     return np.array(keypoints)
 
 # 主要程式
-player_folders = ["Klay_Keypoints_Folder", "Kobe_Keypoints_Folder", "RayAllen_Keypoints_Folder"]  # 指定所有球員的目錄
+player_folders = ["Klay_Keypoints_Folder", "Kobe_Keypoints_Folder", "RayAllen_Keypoints_Folder", "curry_Keypoints_Folder", 
+                  "damian_Keypoints_Folder", "KD_Keypoints_Folder", "korver_Keypoints_Folder", "Lebron_Keypoints_Folder"]  # 指定所有球員的目錄
 
 # 收集所有球員的 keypoints 資料
 all_keypoints_data = []
@@ -62,14 +63,14 @@ if max_keypoints > 0:
     model = keras.Sequential([
         layers.Input(shape=(max_keypoints, 3)),  # 輸入層，3個特徵值（x、y、z）
         layers.LSTM(64, return_sequences=False),  # LSTM層，return_sequences 設為 False
-        layers.Dense(3, activation='softmax')  # 輸出層，3個球員的分類
+        layers.Dense(8, activation='softmax')  # 輸出層，8個球員的分類
     ])
 
     # 編譯模型
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
     # 訓練樣本的標籤
-    player_names = ["Klay", "Kobe", "RayAllen"]  # 設定球員名稱的順序
+    player_names = ["Klay", "Kobe", "RayAllen", "Curry", "Damian", "KD", "Korver", "Lebron"]  # 設定球員名稱的順序
     y_dl = np.repeat(player_names, len(all_keypoints_data) // len(player_names))  # 標籤集
 
     # 將標籤進行編碼
@@ -82,7 +83,7 @@ if max_keypoints > 0:
     X_dl = np.array(all_keypoints_data)  # 特徵集
     X_dl = X_dl.reshape(-1, max_keypoints, 3)  # 重塑特徵集的形狀
 
-    model.fit(X_dl, y_dl, epochs=200)
+    model.fit(X_dl, y_dl, epochs=1000)
     model.save("my_model.h5")
 
     # 預測 new_keypoints 來自哪位球員

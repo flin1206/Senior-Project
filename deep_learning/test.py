@@ -7,7 +7,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 # 指定影片所在檔案夾路徑和 Keypoints 檔案的輸出檔案夾路徑
-name = "RayAllen"
+name = "Lebron"
 video_folder = name + "_Video_Folder"  # 影片所在檔案夾名稱
 output_folder = name + "_Keypoints_Folder"  # Keypoints 檔案輸出檔案夾名稱
 

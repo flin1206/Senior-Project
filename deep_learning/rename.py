@@ -1,7 +1,7 @@
 import os
 
 # 指定目標資料夾的路徑
-name = "Klay"
+name = "Lebron"
 target_folder = name + "_Video_Folder"  # 資料夾名稱，請根據實際情況修改
 
 # 當前目錄的路徑

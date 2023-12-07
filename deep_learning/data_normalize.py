@@ -11,9 +11,9 @@ for filename in os.listdir(current_directory):
             lines = file.readlines()
         
         # 判断文件是否有足够的行数
-        if len(lines) > 1155:
-            # 只保留前1155行
-            lines = lines[:1155]
+        if len(lines) >= 650:
+            # 只保留前650行
+            lines = lines[:650]
             
             # 重新写入文件
             with open(filename, 'w') as file:
@@ -21,4 +21,4 @@ for filename in os.listdir(current_directory):
             
             print(f"文件 {filename} 已被修改")
         else:
-            print(f"文件 {filename} 行数不足1156，未修改")
+            print(f"文件 {filename} 行数不足650，未修改")

@@ -72,7 +72,7 @@ with mp_pose.Pose(
                 line_count += 1
 
                 # 检查行数计数器是否达到限制
-                if line_count >= 1155:
+                if line_count >= 640:
                     break
 
         mp_drawing.draw_landmarks(
@@ -82,7 +82,7 @@ with mp_pose.Pose(
             landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
 
         cv2.imshow('oxxostudio', img)
-        if cv2.waitKey(1) == ord('q') or line_count >= 1155:
+        if cv2.waitKey(1) == ord('q') or line_count >= 640:
             break
 
     # 關閉檔案
@@ -102,17 +102,20 @@ def load_keypoints_file(filename):
     return np.array(keypoints)
 
 # 主要程式
-player_names = ["Klay", "Kobe", "RayAllen"]  # 設定球員名稱的順序
-max_keypoints = 1155  # 用於確保所有特徵集的大小相同
+player_names = ["Klay", "Kobe", "RayAllen", "Curry", "Damian", "KD", "Korver", "Lebron"]  # 設定球員名稱的順序
+max_keypoints = 700  # 用於確保所有特徵集的大小相同
 
 # 載入已保存的模型
-loaded_model = tf.keras.models.load_model("current_model")
+loaded_model = tf.keras.models.load_model("my_model.h5")
 
 # 預測 new_keypoints 來自哪位球員
 new_keypoints = load_keypoints_file(output_filename)  # 替換成您的測試 keypoints 檔案路徑
 # 正規化新 keypoints
 while len(new_keypoints) < max_keypoints:
     new_keypoints = np.vstack((new_keypoints, [0, 0, 0]))
+
+# 截斷或填充新 keypoints 以滿足模型的期望形狀
+new_keypoints = new_keypoints[:max_keypoints]
 predicted_probabilities_dl = loaded_model.predict(np.expand_dims(new_keypoints, axis=0))
 predicted_player_index_dl = np.argmax(predicted_probabilities_dl)
 predicted_player_dl = player_names[predicted_player_index_dl]
