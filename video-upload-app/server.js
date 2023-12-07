@@ -24,7 +24,8 @@ function runPythonScript(filename, socket) {
     console.log(`Python stdout: ${predictionData}`);
 
     // 实时更新数据到前端
-    socket.emit('predictionData', predictionData);
+    const htmlContent = `<div>${predictionData}</div>`; // 包裹在 div 中
+    socket.emit('predictionData', htmlContent);
   });
 
   pythonProcess.stderr.on('data', (data) => {

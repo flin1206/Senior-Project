@@ -120,6 +120,23 @@ predicted_probabilities_dl = loaded_model.predict(np.expand_dims(new_keypoints, 
 predicted_player_index_dl = np.argmax(predicted_probabilities_dl)
 predicted_player_dl = player_names[predicted_player_index_dl]
 
+if(predicted_player_dl == "Klay"):
+    predicted_player_dl = f"<img src=\"images/portfolio/kthompson11.jpg\" alt=\"Klay Thompson\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: One Motion\n改善建議: 從腳站的地方、起跳過程、如何發力以及維持平衡來看，投籃動作較一致，不能只在意上半身，膝蓋需要蹲低才能將全身力量帶到手臂"
+elif(predicted_player_dl == "Korver"):
+    predicted_player_dl = f"<img src=\"images/portfolio/korver.jpg\" alt=\"Kyle Korver\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br> 投籃方式: Two Motion<br>改善建議: 投籃動作簡潔有利，肩膀向前並保持放鬆，球和手臂要筆直抬起，保持高出手點<br>"
+elif(predicted_player_dl == "Kobe"):
+    predicted_player_dl = f"<img src=\"images/portfolio/kobe24.jpg\" alt=\"Kobe Bryant\" width = \"400\" height = \"400\"> <br>{predicted_player_dl}<br>投籃方式: Two Motion<br>改善建議: 持球需將大小臂和肘的方向的方向擺好，讓籃筐在右手和手臂擺成的平面上，做到了這一點手肘自然就會和地面垂直，保持持球的穩定"    
+elif(predicted_player_dl == "RayAllen"):
+    predicted_player_dl = f" <img src=\"images/portfolio/ray allen.jpg\" alt=\"ray allen\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: Two Motion<br>改善建議: 投籃動作具有良好的身體平衡，手肘做一個下沉至腰部附近的動作不但可以讓出手變得更有力量、更輕鬆，還可以幫助找到節奏"
+elif(predicted_player_dl == "Curry"):
+    predicted_player_dl = f" <img src=\"images/portfolio/curry30.jpg\" alt=\"Stephen Curry\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: One Motion<br>改善建議: 投籃動作非常迅速且一致，手肘盡量要垂直，不能內翻或外翻，如果手肘翻轉，就無法保證高弧線和出手力道"
+elif(predicted_player_dl == "Damian"):
+    predicted_player_dl = f" <img src=\"images/portfolio/lillard0.jpg\" alt=\"Damian Lillard\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: One Motion<br>改善建議: 投籃動作非常迅速且一致，用腿部發力來將全身力量帶到手臂，進而嘗試提高拋物線"
+elif(predicted_player_dl == "KD"):
+    predicted_player_dl = f" <img src=\"images/portfolio/KD7.jpg\" alt=\"Kevin Durant\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: Two Motion<br>改善建議: 跳到最高點再出手，需要很強的核心力量才能做到"
+elif(predicted_player_dl == "Lebron"):
+    predicted_player_dl = f" <img src=\"images/portfolio/lebron23.jpg\" alt=\"LeBron James\" width = \"400\" height = \"400\"><br>{predicted_player_dl}<br>投籃方式: Two Motion<br>改善建議: 出手點太高比較沒有辦法迅速出手，可以稍微降低出手點高度"
+    
 print(f'{predicted_player_dl}')
 
 #########################################################################################

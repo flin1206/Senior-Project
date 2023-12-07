@@ -136,8 +136,9 @@
 				
 				<h1>立即測試你的本命球員<span>!</span></h1>
 				<!-- Add this in the head section of your HTML file -->
-<script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
-				<div id="predictionData"></div>  	
+				<script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
+				<div id="predictionData" style="font-size:25px">
+				</div>  	
 				<form id="upload-form" enctype="multipart/form-data" action="/upload" method="POST">
 					<input type="file" id="video-file" name="video" accept="video/*" />
 					<button type="submit">上傳你的投籃精彩片段</button>
@@ -151,8 +152,8 @@
 					// 监听来自服务器的 predictionData 事件
 					socket.on('predictionData', (data) => {
 						console.log('Received predictionData:', data);
-						// 更新网页上的内容
-						document.getElementById('predictionData').innerText = data;
+						// 更新网页上的内容，并使用 innerHTML 属性
+						document.getElementById('predictionData').innerHTML = data;
 					});
 
 					// 监听连接断开事件
